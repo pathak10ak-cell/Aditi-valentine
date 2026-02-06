@@ -14,11 +14,11 @@
         font-family: Arial, sans-serif;
         overflow: hidden;
         text-align: center;
+        transition: background 1s;
     }
 
-    h1 {
+    h1, h2 {
         color: white;
-        margin-bottom: 20px;
     }
 
     .btn {
@@ -28,6 +28,7 @@
         border-radius: 25px;
         cursor: pointer;
         margin: 10px;
+        transition: transform 0.3s;
     }
 
     #yes {
@@ -41,34 +42,93 @@
         color: white;
         position: absolute;
     }
+
+    #msg {
+        margin-top: 15px;
+        color: #fff;
+        font-size: 18px;
+        height: 25px;
+    }
+
+    .heart {
+        position: fixed;
+        color: red;
+        font-size: 24px;
+        animation: float 3s linear forwards;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-200px); opacity: 0; }
+    }
 </style>
 </head>
 <body>
 
 <div>
     <h1>Aditi ❤️</h1>
-    <h1>Will you be my Valentine? 💖</h1>
+    <h2>Will you be my Valentine? 💖</h2>
+
     <button class="btn" id="yes" onclick="yesClicked()">YES 😍</button>
-    <button class="btn" id="no" onmouseover="moveNo()">NO 😏</button>
+    <button class="btn" id="no" onmouseover="moveNo()" onclick="moveNo()">NO 😏</button>
+
+    <div id="msg"></div>
 </div>
 
+<!-- Romantic music -->
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+    const messages = [
+        "Itna aasan nahi hai 😏",
+        "Dobara soch lo Aditi 👀",
+        "YES hi destiny hai 😌",
+        "Dil maan jao ❤️",
+        "Bas YES hi bacha hai 😜"
+    ];
+    let msgIndex = 0;
+
     function moveNo() {
         const noBtn = document.getElementById("no");
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 50);
+        const x = Math.random() * (window.innerWidth - 120);
+        const y = Math.random() * (window.innerHeight - 80);
         noBtn.style.left = x + "px";
         noBtn.style.top = y + "px";
+
+        document.getElementById("msg").innerText = messages[msgIndex];
+        msgIndex = (msgIndex + 1) % messages.length;
     }
 
     function yesClicked() {
+        document.getElementById("music").play();
+        document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ffb3c1)";
+
+        setInterval(createHeart, 300);
+
         document.body.innerHTML = `
             <h1 style="color:white;">
                 Yayyy 🥰<br>
-                I knew it Aditi ❤️<br><br>
-                Happy Valentine 💐
+                Aditi ❤️<br><br>
+                You just made me the happiest person 💖<br>
+                Happy Valentine 😘
             </h1>
+            <audio autoplay loop>
+              <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            </audio>
         `;
+    }
+
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerText = "❤️";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = "100%";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 3000);
     }
 </script>
 
